@@ -245,6 +245,19 @@ def get_transactions(id):
             'return_date': transaction.return_date
     })
 
+#listing books which one user has been borrowed
+@app.route('/transaction/user/<id>')
+def get_user_transaction(id):
+    transaction = Transactions.query.filter_by(user_id=id)
+    return jsonify([
+        {   'transaction_id': transaction.transaction_id, 
+            'user_id': transaction.user_id, 
+            'book_id': transaction.book_id, 
+            'checkout_date': transaction.checkout_date, 
+            'return_date': transaction.return_date
+        } for transaction in transaction
+    ])
+
 #create a transaction
 @app.route('/transaction/', methods=['POST'])
 def create_transaction():
