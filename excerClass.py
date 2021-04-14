@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 from flask import Flask, request, jsonify
 from flask_jwt import JWT, jwt_required, current_identity
 import jwt
@@ -9,7 +8,6 @@ import jwt
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 
 app.config['SECRET_KEY']='secret'
 app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:postgres@localhost:5432/excer'
@@ -59,7 +57,7 @@ def get_user(id):
         } 
 
 #register of users
-@app.route('/users/', methods=['POST'])
+@app.route('/register_users/', methods=['POST'])
 def create_user():
     data = request.get_json()
     if not 'name' in data and not 'email' in data and not 'password' in data:
@@ -85,6 +83,7 @@ def create_user():
     return{ 
         'user_id': u.user_id, 
         'name': u.name, 
+        'username' : u.username,
         'email': u.email, 
         'password' : u.password
     }, 201
@@ -101,17 +100,21 @@ def login_users():
 
     user = Users.query.filter_by(email = data["email"]).first_or_404()
 
-    payload = {'user_id': user.user_id, 'email': user.email, 'password': user.password}
+    payload = {'user_id': user.user_id, 'email': user.email}
 
     encoded_jwt = jwt.encode(payload, "secret", algorithm="HS256")
-    
+
     if bcrypt.check_password_hash(user.password, data["password"]):
         return jsonify ({
             'user_id': user.user_id, 
             'name': user.name, 
             'email': user.email, 
             'password' : user.password,
-            'access_token': encoded_jwt.decode('utf-8')
+            'access_token': encoded_jwt.decode('utf-8') #bytes
+        })
+    else:
+        return jsonify ({
+            'message' : 'Wrong password!'
         })
 
 @app.route('/users/<id>/', methods=['PUT'])
@@ -252,23 +255,23 @@ def create_transaction():
             'message': 'User ID or book ID or check out date not given'
         }), 400
 
-    token = request.headers.get("access_token").encode('utf-8')
+    token = request.headers.get("access_token").encode('utf-8') 
 
     try:
         decoded_token = jwt.decode(token, 'secret', algorithm=["HS256"])
     except jwt.exceptions.DecodeError:
         return "Access token is invalid!"
 
-    if not 'user_id' in decoded_token and not 'email' in decoded_token and not 'password' in decoded_token:
+    if not 'user_id' in decoded_token and not 'email' in decoded_token:
         return jsonify({
             'error' : 'Bad Request',
             'message' : 'Access token is invalid!'
         }), 400
 
     bookSelected = Book.query.filter_by(book_id = data['book_id']).first_or_404()
-    listTransaction = list(Transactions.query.filter_by(book_id=data['book_id'], return_date=None)) 
+    listTransaction = Transactions.query.filter_by(book_id=data['book_id'], return_date=None).count()
 
-    if bookSelected.stock <= len(listTransaction) :
+    if bookSelected.stock <= listTransaction:
         return jsonify({
             'error' : 'Book is out of stock'
         }), 400
@@ -287,7 +290,7 @@ def create_transaction():
             'book_id': transaction.book_id, 
             'checkout_date': transaction.checkout_date, 
             'return_date': transaction.return_date, 
-            'in_stock' : bookSelected.stock - len(listTransaction) - 1
+            'in_stock' : bookSelected.stock - listTransaction - 1
     }, 201
 
 @app.route('/transaction/<id>/', methods=['PUT'])
@@ -312,7 +315,7 @@ def update_transaction(id):
     }, 201
 
 #return book
-@app.route('/returnTransaction/<id>/', methods = ['PUT'])
+@app.route('/return_book/<id>/', methods = ['PUT'])
 def return_transaction(id):
     data = request.get_json()
     transaction = Transactions.query.filter_by(transaction_id=id).first_or_404()
