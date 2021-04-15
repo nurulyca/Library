@@ -65,21 +65,35 @@ def create_user():
             'error': 'Bad Request',
             'message': 'Name or email or password not given'
         }), 400
-    if len(data['name']) < 4 or len(data['email']) < 6:
+
+    if len(data['name']) < 4 :
         return jsonify({
             'error': 'Bad Request',
-            'message': 'Name and email must contain minimum of 4 letters'
+            'message': 'Name must contain minimum of 4 letters'
+        }), 400
+    
+    if len(data['email']) < 6:
+        return jsonify({
+            'error': 'Bad Request',
+            'message': 'Email must contain minimum of 6 letters'
         }), 400
     
     pw_hash = bcrypt.generate_password_hash(data.get('password')).decode('utf-8')
+    
     u = Users(
             name=data['name'],
             username=data['username'],
             email=data['email'],
             password=pw_hash
         )
-    db.session.add(u)
-    db.session.commit() 
+    try:
+        db.session.add(u)
+        db.session.commit() 
+    except:
+        return {
+            'error' : 'Email or username has been taken.'
+        }, 400
+
     return{ 
         'user_id': u.user_id, 
         'name': u.name, 
@@ -97,8 +111,13 @@ def login_users():
             'error' : 'Bad Request',
             'message' : 'Email or password must be given'
         }), 400
-
-    user = Users.query.filter_by(email = data["email"]).first_or_404()
+    
+    try:
+        user = Users.query.filter_by(email = data["email"]).first_or_404()
+    except:
+        return jsonify ({
+            "message" : "Invalid email or password!"
+        }), 401
 
     payload = {'user_id': user.user_id, 'email': user.email}
 
@@ -110,30 +129,46 @@ def login_users():
             'name': user.name, 
             'email': user.email, 
             'password' : user.password,
-            'access_token': encoded_jwt.decode('utf-8') #bytes
+            'access_token': encoded_jwt.decode('utf-8')
         })
     else:
         return jsonify ({
-            'message' : 'Wrong password!'
-        })
+            "message" : "Invalid email or password!"
+        }), 401
 
-@app.route('/users/<id>/', methods=['PUT'])
-def update_user(id):
+@app.route('/users/', methods=['PUT'])
+def update_user():
     data = request.get_json()
-    user = Users.query.filter_by(user_id=id).first_or_404()
+    
+    token = request.headers.get("access_token").encode('utf-8') 
+
+    try:
+        decoded_token = jwt.decode(token, 'secret', algorithm=["HS256"])
+    except jwt.exceptions.DecodeError:
+        return "Access token is invalid!"
+
+    if not 'user_id' in decoded_token and not 'email' in decoded_token:
+        return jsonify({
+            'error' : 'Bad Request',
+            'message' : 'Access token is invalid!'
+        }), 400
+
+    user = Users.query.filter_by(user_id=decoded_token['user_id']).first_or_404()
+
     if 'password'in data:
-        users.password=data['password']
+        pw_hash = bcrypt.generate_password_hash(data.get('password')).decode('utf-8')
+        user.password = pw_hash
     if 'email' in data:
-        users.email = data['email']
+        user.email = data['email']
     if 'name' in data:
-        users.name = data['name']
+        user.name = data['name']
     
     db.session.commit()
     return jsonify({
-            'user_id': users.user_id, 
-            'name': users.name, 
-            'email': users.email, 
-            'password' : users.password
+            'user_id': user.user_id, 
+            'name': user.name, 
+            'email': user.email, 
+            'password' : user.password
         })
 
 @app.route('/users/<id>/', methods=['DELETE'])
@@ -245,27 +280,14 @@ def get_transactions(id):
             'return_date': transaction.return_date
     })
 
-#listing books which one user has been borrowed
-@app.route('/transaction/user/<id>')
-def get_user_transaction(id):
-    transaction = Transactions.query.filter_by(user_id=id)
-    return jsonify([
-        {   'transaction_id': transaction.transaction_id, 
-            'user_id': transaction.user_id, 
-            'book_id': transaction.book_id, 
-            'checkout_date': transaction.checkout_date, 
-            'return_date': transaction.return_date
-        } for transaction in transaction
-    ])
-
 #create a transaction
 @app.route('/transaction/', methods=['POST'])
 def create_transaction():
     data = request.get_json()
-    if not 'user_id' in data and not 'book_id' in data and not 'checkout_date' in data:
+    if not 'book_id' in data and not 'checkout_date' in data:
         return jsonify({
             'error': 'Bad Request',
-            'message': 'User ID or book ID or check out date not given'
+            'message': 'Book ID or check out date not given'
         }), 400
 
     token = request.headers.get("access_token").encode('utf-8') 
@@ -311,8 +333,6 @@ def update_transaction(id):
     data = request.get_json()
     transaction = Transactions.query.filter_by(transaction_id=id).first_or_404()
 
-    if 'user_id'in data:
-        transaction.user_id = data['user_id']
     if 'book_id' in data:
         transaction.book_id = data['book_id']
     if 'checkout_date' in data:
@@ -345,6 +365,7 @@ def return_transaction(id):
             'error' : 'Bad Request',
             'message' : 'Access token is invalid!'
         }), 400
+
     if decoded_token['user_id'] != transaction.user_id:
         return jsonify ({
             'error' : 'Bad Request',
