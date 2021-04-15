@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, request, jsonify
 from flask_jwt import JWT, jwt_required, current_identity
 import jwt
+import re
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -15,7 +16,7 @@ app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:postgres@localhost:
 
 class Users(db.Model):
     user_id = db.Column(db.Integer, primary_key=True, index=True)
-    username = db.Column(db.String(20), nullable=False, unique=True)
+    username = db.Column(db.String(20), nullable=False)
     name = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(28), nullable=False, unique=True)
     password = db.Column(db.String, nullable=False)
@@ -33,6 +34,7 @@ class Transactions(db.Model):
     checkout_date = db.Column(db.String, nullable=False)
     return_date = db.Column(db.String, nullable=True)
 
+regex = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
 
 #endpoints of user
 @app.route('/users/')
@@ -41,6 +43,7 @@ def get_users():
         {
             'user_id': user.user_id, 
             'name': user.name, 
+            'username' : user.username,
             'email': user.email, 
             'password' : user.password
             } for user in Users.query.all()
@@ -52,12 +55,14 @@ def get_user(id):
     return {
             'user_id': user.user_id, 
             'name': user.name, 
+            'username' : user.username,
             'email': user.email, 
             'password' : user.password
         } 
 
 #register of users
 @app.route('/register_users/', methods=['POST'])
+
 def create_user():
     data = request.get_json()
     if not 'name' in data and not 'email' in data and not 'password' in data:
@@ -72,10 +77,10 @@ def create_user():
             'message': 'Name must contain minimum of 4 letters'
         }), 400
     
-    if len(data['email']) < 6:
+    if (re.search(regex, data['email'])) == None:   
         return jsonify({
             'error': 'Bad Request',
-            'message': 'Email must contain minimum of 6 letters'
+            'message': 'Email is invalid!'
         }), 400
     
     pw_hash = bcrypt.generate_password_hash(data.get('password')).decode('utf-8')
@@ -91,7 +96,7 @@ def create_user():
         db.session.commit() 
     except:
         return {
-            'error' : 'Email or username has been taken.'
+            'error' : 'Email has been taken.'
         }, 400
 
     return{ 
@@ -121,7 +126,7 @@ def login_users():
 
     payload = {'user_id': user.user_id, 'email': user.email}
 
-    encoded_jwt = jwt.encode(payload, "secret", algorithm="HS256")
+    encoded_jwt = jwt.encode(payload, 'secret', algorithm="HS256")
 
     if bcrypt.check_password_hash(user.password, data["password"]):
         return jsonify ({
@@ -133,7 +138,7 @@ def login_users():
         })
     else:
         return jsonify ({
-            "message" : "Invalid email or password!"
+            "message" : "Wrong email or password!"
         }), 401
 
 @app.route('/users/', methods=['PUT'])
@@ -159,10 +164,22 @@ def update_user():
         pw_hash = bcrypt.generate_password_hash(data.get('password')).decode('utf-8')
         user.password = pw_hash
     if 'email' in data:
-        user.email = data['email']
+        if (re.search(regex, data['email'])):
+            user.email = data['email']
+        else:
+            return jsonify({
+                'error': 'Bad Request',
+                'message': 'Email is invalid!'
+                }), 400
     if 'name' in data:
-        user.name = data['name']
-    
+        if len(data['name']) > 4:
+            user.name = data['name']
+        else:
+            return jsonify({
+            'error': 'Bad Request',
+            'message': 'Name must contain minimum of 4 letters'
+        }), 400
+
     db.session.commit()
     return jsonify({
             'user_id': user.user_id, 
@@ -237,7 +254,7 @@ def update_book(id):
     if 'title' in data:
         book.title = data['title']
     if 'stock' in data:
-        book.title = data['stock']
+        book.stock = data['stock']
 
     db.session.commit()
     return {
