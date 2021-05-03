@@ -9,7 +9,7 @@ from flask_cors import CORS, cross_origin
 
 cors_config = {
     "origins": ["http://127.0.0.1:5001"],
-    "methods": ["GET"]
+    "methods": ["GET", "POST", "PUT", "DELETE"]
 }
 app = Flask(__name__)
 CORS(app, resources={

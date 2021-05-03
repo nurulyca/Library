@@ -1,0 +1,13 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+#userTable {  
+  border-collapse: collapse;
+}
+
+#userTable th, #userTable td {
+  border: 1px solid black;
+  padding: .5rem;
+}
