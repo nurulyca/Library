@@ -1,14 +1,23 @@
-from flask import Flask
+from flask import Flask, make_response
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, request, jsonify
 from flask_jwt import JWT, jwt_required, current_identity
 import jwt
 import re
+from flask_cors import CORS, cross_origin
 
+cors_config = {
+    "origins": ["http://127.0.0.1:5001"],
+    "methods": ["GET"]
+}
 app = Flask(__name__)
+CORS(app, resources={
+    r"/*": cors_config
+})
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
+
 
 app.config['SECRET_KEY']='secret'
 app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:postgres@localhost:5432/excer'
@@ -37,9 +46,13 @@ class Transactions(db.Model):
 regex = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
 
 #endpoints of user
+
 @app.route('/users/')
 def get_users():
-    return jsonify([
+    response = make_response()
+
+    #response.headers.add("Access-Control-Allow-Origin", "*")
+    response = jsonify([
         {
             'user_id': user.user_id, 
             'name': user.name, 
@@ -48,6 +61,7 @@ def get_users():
             'password' : user.password
             } for user in Users.query.all()
     ]) 
+    return response
 
 @app.route('/users/<id>/')
 def get_user(id):
@@ -61,6 +75,8 @@ def get_user(id):
         } 
 
 #register of users
+
+
 @app.route('/register_users/', methods=['POST'])
 
 def create_user():
@@ -415,5 +431,23 @@ def delete_transaction(id):
         'success': 'Transaction deleted successfully'
     }
 
+@app.after_request
+def after_request_func(response):
+        origin = request.headers.get('Origin')
+        if request.method == 'OPTIONS':
+            response = make_response()
+            response.headers.add('Access-Control-Allow-Credentials', 'true')
+            response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+            response.headers.add('Access-Control-Allow-Headers', 'x-csrf-token')
+            response.headers.add('Access-Control-Allow-Methods',
+                                'GET, POST, OPTIONS, PUT, PATCH, DELETE')
+            if origin:
+                response.headers.add('Access-Control-Allow-Origin', origin)
+        else:
+            response.headers.add('Access-Control-Allow-Credentials', 'true')
+            if origin:
+                response.headers.add('Access-Control-Allow-Origin', origin)
+
+        return response
 if __name__ == '__main__':
     app.run(debug=True)
