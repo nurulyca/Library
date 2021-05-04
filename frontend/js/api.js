@@ -26,6 +26,7 @@ form.addEventListener('submit', (e) => {
 })
 
 // update user info
+/*
 const updateForm = document.querySelector('#updateForm');
 updateForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -44,3 +45,4 @@ fetch('http://localhost:5000/users/admin/' + id, {
   .then(res => res.json())
   .then(jsonRes => console.log(jsonRes))
 })
+*/

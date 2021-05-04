@@ -1,11 +1,4 @@
-// selecting the input with name property "name"
-const updateName = document.querySelector('input[name="updatename"]'); 
-// selecting the input with name property "email"
-const updateEmail = document.querySelector('input[name="updateemail"]');
-// selecting the input with name property "password"
-const updatePassword = document.querySelector('input[name="updatepassword"]') 
-// selecting the input with name property "ID"
-const updateId = document.querySelector('input[name="updateid"]') 
+
 
 function createHTMLRow(data) {  
   // creating a row of cells in table
@@ -17,30 +10,22 @@ function createHTMLRow(data) {
   // creating a button
   const button = document.createElement('button');
   // creating the button within text of "Update"
-  const insideButton = document.createTextNode("Update");
+  const insideButton = document.createTextNode("View");
   // adding insideButton to the button 
   button.appendChild(insideButton)
   // if the button was clicked, it's updating the updated value in the form.
   button.onclick = () => {
-    // the updated
-    updateName.value = data.name
-    updateEmail.value = data.email
-    updateId.value = data.id
+    window.location.href = "view.html?id=" + data.id
   }
   
   // === DELETE ===
   // creating a delete button
-  const deleteButton = document.createElement('button');
+  const updateButton = document.createElement('button');
   // putting the text "Delete" to the delete button
-  deleteButton.innerText = "Delete"
+  updateButton.innerText = "Edit"
   // delete the data by click the delete button
-  deleteButton.onclick = function(){
-     return fetch('http://localhost:5000/users/' + data.id + "/", {
-      method: 'DELETE'
-      })
-      .then(res => res.json())
-      .then(text => console.log(text))
-      .catch(err => console.log(err))
+  updateButton.onclick = function(){
+    window.location.href = "edit.html?id=" + data.id
     }
   
   for (prop in data) {
@@ -54,7 +39,7 @@ function createHTMLRow(data) {
     // adding button to the td
     td.appendChild(button)
     // adding delete button to the td
-    td.appendChild(deleteButton)
+    td.appendChild(updateButton)
     // adding td to the row
     row.appendChild(td)
     // return the row
