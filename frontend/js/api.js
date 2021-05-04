@@ -1,11 +1,14 @@
+// get all users
 function getUsers() {
   return fetch('http://localhost:5000/users')
     .then(response => response.json())
     .then(json => json);
 }
 
+// create new user
 const form = document.querySelector('#userForm');
 form.addEventListener('submit', (e) => {
+  console.log(e)
   e.preventDefault();
 
   const data = new FormData(form);
@@ -19,18 +22,19 @@ form.addEventListener('submit', (e) => {
     body: json
   })
   .then(res => res.json())
-    //window.location.reload(true)
-  .then(text => console.log(text))
+  .then(jsonRes => console.log(jsonRes))
 })
 
+// update user info
 const updateForm = document.querySelector('#updateForm');
 updateForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  const data = new FormData(updateForm);
-  const json = JSON.stringify((Object.fromEntries(data)));
+const data = new FormData(updateForm);
+const json = JSON.stringify((Object.fromEntries(data)));
+const id = JSON.parse(json).updateid
 
-  fetch('http://localhost:5000/users/', {
+fetch('http://localhost:5000/users/admin/' + id, {
     method: 'PUT',
     headers: { 
       'Content-Type' : 'application/json'
@@ -38,5 +42,5 @@ updateForm.addEventListener('submit', (e) => {
     body: json
   })
   .then(res => res.json())
-  .then(text => console.log(text))
+  .then(jsonRes => console.log(jsonRes))
 })

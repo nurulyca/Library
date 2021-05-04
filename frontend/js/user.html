@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+  <title>User</title>
+</head>
+<body>    
+  <!-- contoh table dengan data dari api, lihat fungsi getUsers() di user.js-->
+  <table id="userTable">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Password</th>
+        <th scope="col">Email</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  
+  <form id="userForm">
+    <fieldset>
+      <legend>Create New User</legend> 
+      <div>
+        <label>Name</label>
+        <input type="text" name="name" />
+      </div>
+      <div>
+        <label>Email</label>
+        <input type="email" name="email" />
+      </div>
+      <div>
+        <label>Password</label>
+        <input type="text" name="password" />
+      </div>
+      <div>
+        <input type="submit" value="Submit">
+      </div>
+    </fieldset>
+  </form>
+
+  <form id="updateForm">
+    <fieldset>
+      <legend>Update User</legend> 
+      <div>
+        <label>Name</label>
+        <input type="text" name="updatename" />
+      </div>
+      <div>
+        <label>ID</label>
+        <input type="text" name="updateid" />
+      </div>
+      <div>
+        <label>Email</label>
+        <input type="email" name="updateemail" />
+      </div>
+      <div>
+        <label>Password</label>
+        <input type="text" name="updatepassword" />
+      </div>
+      <div>
+        <input type="submit" value="Submit">
+      </div>
+    </fieldset>
+  </form>
+
+  <script src="js/util.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/user.js"></script>  
+</body>
+</html>

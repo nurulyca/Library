@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {  
-  
-  getUsers().then(users => {
+
+    getUsers().then(users => {
     const userTable = document.querySelector('#userTable');
     const tbody = userTable.querySelector('tbody');
     
