@@ -25,7 +25,7 @@ app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:postgres@localhost:
 
 class Users(db.Model):
     user_id = db.Column(db.Integer, primary_key=True, index=True)
-    username = db.Column(db.String(20), nullable=False)
+    username = db.Column(db.String(20), nullable=True)
     name = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(28), nullable=False, unique=True)
     password = db.Column(db.String, nullable=False)
@@ -103,7 +103,7 @@ def create_user():
     
     u = Users(
             name=data['name'],
-            username=data['username'],
+            username=data['name'],
             email=data['email'],
             password=pw_hash
         )
@@ -245,11 +245,18 @@ def update_user_by_admin(id):
 @app.route('/users/<id>/', methods=['DELETE'])
 def delete_user(id):
     user = Users.query.filter_by(user_id=id).first_or_404()
-    db.session.delete(user)
-    db.session.commit()
-    return {
-        'success': 'User deleted successfully'
-    }
+    print(user)
+    try:
+        db.session.delete(user)
+        db.session.commit()
+        return {
+            'success': 'User deleted successfully'
+        }
+    except:
+        return jsonify({
+            'error': 'Bad Request',
+            'message': 'error'
+        }), 400
 
 #endpoints of book
 @app.route('/book/')
