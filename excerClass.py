@@ -204,6 +204,44 @@ def update_user():
             'password' : user.password
         })
 
+@app.route('/users/admin/<id>', methods=['PUT'])
+def update_user_by_admin(id):
+    data = request.get_json()
+    print(data)
+
+    user = Users.query.filter_by(user_id=id).first_or_404()
+    print(user.name)
+
+    if 'updatepassword'in data and len(data["updatepassword"]) > 0:
+        pw_hash = bcrypt.generate_password_hash(data.get('updatepassword')).decode('utf-8')
+        user.password = pw_hash
+    if 'updateemail' in data:
+        if (re.search(regex, data['updateemail'])):
+            user.email = data['updateemail']
+        else:
+            return jsonify({
+                'error': 'Bad Request',
+                'message': 'Email is invalid!'
+                }), 400
+    if 'updatename' in data:
+        if len(data['updatename']) > 4:
+            user.name = data['updatename']
+        else:
+            return jsonify({
+            'error': 'Bad Request',
+            'message': 'Name must contain minimum of 4 letters'
+        }), 400
+    try:
+        db.session.commit()
+        return jsonify({
+            'user_id': user.user_id, 
+            'name': user.name, 
+            'email': user.email, 
+            'password' : user.password
+        })
+    except:
+        return "error"
+
 @app.route('/users/<id>/', methods=['DELETE'])
 def delete_user(id):
     user = Users.query.filter_by(user_id=id).first_or_404()
