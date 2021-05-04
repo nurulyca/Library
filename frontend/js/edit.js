@@ -7,13 +7,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const updatePassword = document.querySelector('input[name="updatepassword"]') 
     // selecting the input with name property "ID"
     const updateId = document.querySelector('input[name="updateid"]') 
-    console.log(window.location.search.split("?"))
+    
     let params = window.location.search.split("?")[1]
     params = params.split("=")
     let id = params[1]
     getUserById(id)
     .then(res => {
-        console.log(res)
         updateName.value = res.name
         updateEmail.value = res.email
         updatePassword.value = res.password

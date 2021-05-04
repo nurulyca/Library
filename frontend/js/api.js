@@ -24,25 +24,3 @@ form.addEventListener('submit', (e) => {
   .then(res => res.json())
   .then(jsonRes => console.log(jsonRes))
 })
-
-// update user info
-/*
-const updateForm = document.querySelector('#updateForm');
-updateForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-
-const data = new FormData(updateForm);
-const json = JSON.stringify((Object.fromEntries(data)));
-const id = JSON.parse(json).updateid
-
-fetch('http://localhost:5000/users/admin/' + id, {
-    method: 'PUT',
-    headers: { 
-      'Content-Type' : 'application/json'
-    },
-    body: json
-  })
-  .then(res => res.json())
-  .then(jsonRes => console.log(jsonRes))
-})
-*/
