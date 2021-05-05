@@ -45,6 +45,7 @@ fetch('http://localhost:5000/users/admin/' + id, {
   .then(res => res.json())
   .then(jsonRes => {
     console.log(jsonRes)
+    // returns the href (URL) of the page
     window.location.href = "user.html"
   })
 })

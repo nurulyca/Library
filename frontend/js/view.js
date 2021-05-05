@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('load');
-    console.log(window.location.search.split("?"))
-    let params = window.location.search.split("?")[1]
-    params = params.split("=")
+    
+    let params = window.location.search.split("?")[1] // ["", "id=1"]
+    params = params.split("=") // ["id", "1"]
     let id = params[1]
     getUserById(id)
     .then(res => {
@@ -17,8 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
     })
   });
 
-
-function getUserById(id) {
+  function getUserById(id) {
     return fetch("http://127.0.0.1:5000/users/" + id + "/")
     .then(res => res.json())
     .then(jsonRes => jsonRes)
