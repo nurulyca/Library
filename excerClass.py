@@ -2,6 +2,8 @@ from flask import Flask, make_response
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, request, jsonify
+from sqlalchemy import create_engine
+from sqlalchemy.sql import text
 from flask_jwt import JWT, jwt_required, current_identity
 import jwt
 import re
@@ -21,7 +23,8 @@ db = SQLAlchemy(app)
 
 app.config['SECRET_KEY']='secret'
 app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:postgres@localhost:5432/excer'
-
+connect_str = 'postgresql://postgres:postgres@localhost:5432/excer'
+engine = create_engine(connect_str, echo=False)
 
 class Users(db.Model):
     user_id = db.Column(db.Integer, primary_key=True, index=True)
@@ -49,9 +52,6 @@ regex = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
 
 @app.route('/users/')
 def get_users():
-    response = make_response()
-
-    #response.headers.add("Access-Control-Allow-Origin", "*")
     response = jsonify([
         {
             'user_id': user.user_id, 
@@ -62,6 +62,25 @@ def get_users():
             } for user in Users.query.all()
     ]) 
     return response
+
+@app.route('/users/pagination')
+def get_users_by_offset_limit():
+    offset = request.args.get("offset")
+    limit = request.args.get("limit")
+    
+    all = []
+    with engine.connect() as connection:
+        qry = text("SELECT * FROM users OFFSET {}  LIMIT {}".format(offset, limit))
+        result = connection.execute(qry)
+        for item in result:
+            all.append({
+                'user_id': item[0],
+                'username': item[1],
+                'name' : item[2],
+                'password' : item[3],
+                'email' : item[4],
+            })
+    return {'data': all, 'total': len(list(all))}
 
 @app.route('/users/<id>/')
 def get_user(id):

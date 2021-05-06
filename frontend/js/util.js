@@ -18,7 +18,7 @@ function createHTMLRow(data) {
   const updateButton = document.createElement('button');
   // putting the text "Edit" to the button
   updateButton.innerText = "Edit"
-  // irecting to the link by click the edit button
+  // directing to the link by click the edit button
   updateButton.onclick = function(){
     window.location.href = "edit.html?id=" + data.id
     }

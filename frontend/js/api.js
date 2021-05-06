@@ -1,6 +1,6 @@
 // get all users
-function getUsers() {
-  return fetch('http://localhost:5000/users')
+function getUsers(offset, limit) {
+  return fetch('http://localhost:5000/users/pagination?offset=' + offset + "&limit=" + limit)
     .then(response => response.json())
     .then(json => json);
 }
