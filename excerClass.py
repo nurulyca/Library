@@ -82,6 +82,51 @@ def get_users_by_offset_limit():
             })
     return {'data': all, 'total': len(list(all))}
 
+@app.route('/search_user/<name>')
+def search_user(name):
+    all = []
+    with engine.connect() as connection:
+        qry = text("SELECT * FROM users WHERE name ILIKE'%{}%';".format(name))
+        result = connection.execute(qry)
+        for item in result:
+            all.append({
+                'id': item[0],
+                'name' : item[2],
+                'password' : item[3],
+                'email' : item[4]
+            })
+    return jsonify(all)
+
+@app.route('/sort_user/name')
+def sort_user_name():
+    all = []
+    with engine.connect() as connection:
+        qry = text("SELECT * FROM users ORDER BY name")
+        result = connection.execute(qry)
+        for item in result:
+            all.append({
+                'id': item[0],
+                'name' : item[2],
+                'password' : item[3],
+                'email' : item[4]
+            })
+    return jsonify(all)
+
+@app.route('/sort_user/id')
+def sort_user_id():
+    all = []
+    with engine.connect() as connection:
+        qry = text("SELECT * FROM users ORDER BY user_id")
+        result = connection.execute(qry)
+        for item in result:
+            all.append({
+                'id': item[0],
+                'name' : item[2],
+                'password' : item[3],
+                'email' : item[4]
+            })
+    return jsonify(all)
+
 @app.route('/users/<id>/')
 def get_user(id):
     user = Users.query.filter_by(user_id=id).first_or_404()

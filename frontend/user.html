@@ -4,11 +4,20 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/user.css">
   <title>User</title>
 </head>
-<body>    
-  
+<body> 
+  <form > 
+    <label>Search here..</label>
+    <input type="text" name="searchname" placeholder="Enter name.."/>
+  <button class="search_bar">Search</button> 
+  </form>
+  <div style="margin-top: 20px;">
+    <button class="sort-name">Sort By Name</button>
+    <button class="sort-id">Sort By ID</button>
+
+  </div>
   <table id="userTable">
     <thead>
       <tr>
@@ -20,29 +29,29 @@
       </tr>
     </thead>
     <tbody></tbody>
-  </table>
+  </table><br>
   <button class="one">1</button>
   <button class="two">2</button>
-  <button class="three">3</button>
+  <button class="three">3</button> <br> <br>
   
   <form id="userForm">
     <fieldset>
-      <legend>Create New User</legend> 
+      <legend>Create New User</legend> <br>
       <div>
         <label>Name</label>
-        <input type="text" name="name" />
+        <input type="text" name="name" placeholder="Your name.."/>
       </div>
       <div>
         <label>Email</label>
-        <input type="email" name="email" />
+        <input type="email" name="email" placeholder="Your email.."/>
       </div>
       <div>
         <label>Password</label>
-        <input type="text" name="password" />
+        <input type="text" name="password" placeholder="Your password.."/>
       </div>
       <div>
         <label>Username</label>
-        <input type="text" name="username" />
+        <input type="text" name="username" placeholder="Your username.."/> <br> <br>
       </div>
       <div>
         <input type="submit" value="Submit">

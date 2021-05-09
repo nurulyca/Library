@@ -1,0 +1,153 @@
+@import "compass/css3";
+@import url(http://fonts.googleapis.com/css?family=Roboto:100,500,300,700,400);
+
+body{
+  display: table;
+  width: 100%;
+  background: #f5dbdb;
+  text-align: center;
+}
+*{ 
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  box-sizing: border-box;         /* Opera/IE 8+ */
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+
+table{
+   background: #fff;
+}
+table,thead,tbody,tfoot,tr, td,th{
+  text-align: center;
+  margin: auto;
+  padding: 1rem;
+  width: 50%;
+  margin-top: 20px;
+}
+.table    { display: table; width: 50%; }
+.tr       { display: table-row;  }
+.thead    { display: table-header-group }
+.tbody    { display: table-row-group }
+.tfoot    { display: table-footer-group }
+.col      { display: table-column }
+.colgroup { display: table-column-group }
+.td, .th   { display: table-cell; width: 50%; }
+.caption  { display: table-caption }
+
+.table,
+.thead,
+.tbody,
+.tfoot,
+.tr,
+.td,
+.th{
+  text-align: center;
+  margin: auto;
+  padding: 1rem;
+}
+.table{
+  background: #fff;
+  margin: auto;
+  border:none;
+  padding: 0;
+  margin-bottom: 5rem;
+}
+
+.th{
+  font-weight: 700;
+  border:1px solid #dedede;
+    border-right:none;
+  }
+
+.td{
+  font-weight: 300;
+  border:1px solid #dedede;
+  border-top:none;
+    border-right:none;
+  }
+
+.one, .two, .three {
+    display: inline-block;
+    color: black;
+    padding: 8px 16px;
+    text-decoration: none;
+  }
+
+.search_bar {
+    border-style:bold;
+    background-color: white;
+}
+
+
+#userForm {
+        box-sizing: border-box;
+        }
+      
+      input[type=text], select, textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+        float: center
+      }
+      
+      label {
+        padding: 12px;
+        display: inline-block;
+        margin-left: 30;
+      }
+
+      input[type=email], select, textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+        float: center;
+      }
+
+      label[type=email], select, textarea {
+        padding: 12px;
+        display: inline-block;
+      }
+      
+      input[type=submit] {
+        background-color: #f1f4f1;
+        color: rgb(0, 0, 0);
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        float: center;
+      }
+      
+      input[type=submit]:hover {
+        background-color: #707270;
+      }
+      
+      .container {
+        border-radius: 5px;
+        background-color: #0f0f0f;
+        padding: 20px;
+      }
+      
+
+      .row:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+      
+      /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+      @media screen and (max-width: 600px) {
+        .col-25, .col-75, input[type=submit] {
+          width: 100%;
+          margin-top: 0;
+        }
+      }
+
+      legend {
+        font-size: large;
+        font-weight: bold;
+      }

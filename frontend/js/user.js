@@ -2,15 +2,80 @@ document.addEventListener('DOMContentLoaded', function() {
     const paginationOne = document.querySelector(".one")
     const paginationTwo = document.querySelector(".two")
     const paginationThree = document.querySelector(".three")
+    const search_bar = document.querySelector(".search_bar")
+    const sortName = document.querySelector(".sort-name")
+    const sortId = document.querySelector(".sort-id")
+    const searchName = document.querySelector('input[name="searchname"]');
+    
+    search_bar.onclick = e => {
+      e.preventDefault()
+      searchUser(searchName.value)
+        .then(users => {
+          const userTable = document.querySelector('#userTable');
+          const tbody = userTable.querySelector('tbody');
+          console.log("TOTAL: ", users)
+      
+        tbody.innerHTML = '';
+        let sortedUsers = users.sort((a,b) => a.user_id - b.user_id)
+        sortedUsers.forEach(item => {
+          const row = createHTMLRow({ 
+            id: item.id, 
+            name: item.name, 
+            password: item.password, 
+            email: item.email 
+          });
+          tbody.appendChild(row);
+        })   
+        })
+      console.log(searchName.value)
+    }
 
-    getUserWithPagination(0, 2)
+    sortName.onclick = e => {
+      e.preventDefault()
+      sortUserName().then(users => {
+        const userTable = document.querySelector('#userTable');
+        const tbody = userTable.querySelector('tbody');
+    
+      tbody.innerHTML = '';
+      users.forEach(item => {
+        const row = createHTMLRow({ 
+          id: item.id, 
+          name: item.name, 
+          password: item.password, 
+          email: item.email 
+        });
+        tbody.appendChild(row);
+      })   
+      })
+    }
+
+    sortId.onclick = e => {
+      e.preventDefault()
+      sortUserId().then(users => {
+        const userTable = document.querySelector('#userTable');
+        const tbody = userTable.querySelector('tbody');
+    
+      tbody.innerHTML = '';
+      users.forEach(item => {
+        const row = createHTMLRow({ 
+          id: item.id, 
+          name: item.name, 
+          password: item.password, 
+          email: item.email 
+        });
+        tbody.appendChild(row);
+      })   
+      })
+    }
+    
     let limit = 2
+    getUserWithPagination(0, limit)
 
     paginationOne.onclick = () => {
       paginationOne.disabled = true
       paginationTwo.disabled = false
       paginationThree.disabled = false
-      let offset = +paginationOne.innerHTML - 1
+      let offset = Number(paginationOne.innerHTML) - 1
       getUserWithPagination(offset, limit)
     }
     paginationTwo.onclick = () => {
@@ -28,6 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
       getUserWithPagination(offset, limit)
     }
 });
+
 
 
 function getUserWithPagination(offset, limit){

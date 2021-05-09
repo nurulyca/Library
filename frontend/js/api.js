@@ -24,3 +24,21 @@ form.addEventListener('submit', (e) => {
   .then(res => res.json())
   .then(jsonRes => console.log(jsonRes))
 })
+
+
+function searchUser(name){
+  return fetch('http://localhost:5000/search_user/' + name)
+    .then(response => response.json())
+    .then(json => json);
+}
+
+function sortUserName(){
+  return fetch('http://localhost:5000/sort_user/name')
+    .then(response => response.json())
+    .then(json => json);
+}
+function sortUserId(){
+  return fetch('http://localhost:5000/sort_user/id')
+    .then(response => response.json())
+    .then(json => json);
+}
