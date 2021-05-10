@@ -86,7 +86,7 @@ def get_users_by_offset_limit():
 def search_user(name):
     all = []
     with engine.connect() as connection:
-        qry = text("SELECT * FROM users WHERE name ILIKE'%{}%';".format(name))
+        qry = text("SELECT * FROM users WHERE name ILIKE'%{}%' ORDER BY name".format(name))
         result = connection.execute(qry)
         for item in result:
             all.append({
@@ -99,9 +99,12 @@ def search_user(name):
 
 @app.route('/sort_user/name')
 def sort_user_name():
+    offset = request.args.get("offset")
+    limit = request.args.get("limit")
+    
     all = []
     with engine.connect() as connection:
-        qry = text("SELECT * FROM users ORDER BY name")
+        qry = text("SELECT * FROM users ORDER BY name OFFSET {} LIMIT {}".format(offset, limit))
         result = connection.execute(qry)
         for item in result:
             all.append({
@@ -114,9 +117,12 @@ def sort_user_name():
 
 @app.route('/sort_user/id')
 def sort_user_id():
+    offset = request.args.get("offset")
+    limit = request.args.get("limit")
+    
     all = []
     with engine.connect() as connection:
-        qry = text("SELECT * FROM users ORDER BY user_id")
+        qry = text("SELECT * FROM users ORDER BY user_id OFFSET {} LIMIT {}".format(offset, limit))
         result = connection.execute(qry)
         for item in result:
             all.append({

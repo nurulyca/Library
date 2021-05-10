@@ -32,13 +32,13 @@ function searchUser(name){
     .then(json => json);
 }
 
-function sortUserName(){
-  return fetch('http://localhost:5000/sort_user/name')
+function sortUserName(offset=0, limit=2){
+  return fetch(`http://localhost:5000/sort_user/name?offset=${offset}&limit=${limit}`)
     .then(response => response.json())
     .then(json => json);
 }
-function sortUserId(){
-  return fetch('http://localhost:5000/sort_user/id')
+function sortUserId(offset=0, limit=2){
+  return fetch(`http://localhost:5000/sort_user/id?offset=${offset}&limit=${limit}`)
     .then(response => response.json())
     .then(json => json);
 }
