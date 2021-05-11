@@ -4,7 +4,7 @@
 body{
   display: table;
   width: 100%;
-  background: #f5dbdb;
+  background: #717070;
   text-align: center;
 }
 *{ 
@@ -51,6 +51,7 @@ table,thead,tbody,tfoot,tr, td,th{
   border:none;
   padding: 0;
   margin-bottom: 5rem;
+  width: 100%;
 }
 
 .th{
@@ -73,11 +74,35 @@ table,thead,tbody,tfoot,tr, td,th{
     text-decoration: none;
   }
 
+
 .search_bar {
     border-style:bold;
-    background-color: white;
+    color: white;
+    background-color: rgb(0, 0, 0);
+    border: none;
+    font-style: oblique;
+    cursor: pointer;
+    padding: 20px;
 }
 
+.sort-name {
+    border: none;
+    color: white;
+    background-color: rgb(0, 0, 0);
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-family: Verdana, Geneva, Tahoma, sans-serif
+}
+
+.sort-id {
+    border: none;
+    color: white;
+    background-color: rgb(0, 0, 0);
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
 
 #userForm {
         box-sizing: border-box;
@@ -138,6 +163,25 @@ table,thead,tbody,tfoot,tr, td,th{
         display: table;
         clear: both;
       }
+      .view-button{
+        border: none;
+        color: white;
+        background-color: rgb(0, 0, 0);
+        padding: 10px;
+        border-radius: 30px;
+        margin-bottom: 10px;
+        cursor: pointer;
+         }
+
+      .update-button{
+        border: none;
+        color: white;
+        background-color: rgb(0, 0, 0);
+        padding: 10px;
+        border-radius: 30px;
+        margin-bottom: 10px;
+        cursor: pointer;
+         }
       
       /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
       @media screen and (max-width: 600px) {
@@ -150,4 +194,7 @@ table,thead,tbody,tfoot,tr, td,th{
       legend {
         font-size: large;
         font-weight: bold;
+        color: white;
       }
+
+  

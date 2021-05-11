@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
       })   
       })
     }
+    sortName.className = "sort-name"
 
     sortId.onclick = e => {
       e.preventDefault()
@@ -75,6 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
       })   
       })
     }
+      sortId.className = "sort-id"
     
     let limit = 2
     getUserWithPagination(0, limit)
@@ -87,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if(!isSortName && !isSortId){
          getUserWithPagination(offset, limit)
       } else if (isSortName && !isSortId){
-        sortUserName(offset, 3).then(users => {
+        sortUserName(offset, 2).then(users => {
           const userTable = document.querySelector('#userTable');
           const tbody = userTable.querySelector('tbody');
 
@@ -104,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })   
         })
       } else if (isSortId && !isSortName){
-        sortUserId(offset, 3).then(users => {
+        sortUserId(offset, 2).then(users => {
           const userTable = document.querySelector('#userTable');
           const tbody = userTable.querySelector('tbody');
         
@@ -129,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if(!isSortName && !isSortId){
         getUserWithPagination(offset, limit)
      } else if (isSortName && !isSortId){
-       sortUserName(offset, 3).then(users => {
+       sortUserName(offset, 2).then(users => {
          const userTable = document.querySelector('#userTable');
          const tbody = userTable.querySelector('tbody');
      
@@ -146,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
       })
     }
     else if (isSortId && !isSortName){
-      sortUserId(offset, 3).then(users => {
+      sortUserId(offset, 2).then(users => {
         const userTable = document.querySelector('#userTable');
         const tbody = userTable.querySelector('tbody');
       
@@ -168,11 +170,11 @@ document.addEventListener('DOMContentLoaded', function() {
       paginationOne.disabled = false
       paginationTwo.disabled = false
       paginationThree.disabled = true
-      let offset = +paginationThree.innerHTML + 2
+      let offset = +paginationThree.innerHTML + 1
       if(!isSortName && !isSortId){
         getUserWithPagination(offset, limit)
      } else if (isSortName && !isSortId){
-       sortUserName(offset, 3).then(users => {
+       sortUserName(offset, 2).then(users => {
          const userTable = document.querySelector('#userTable');
          const tbody = userTable.querySelector('tbody');
      
@@ -189,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
       })
     }
     else if (isSortId && !isSortName){
-      sortUserId(offset, 3).then(users => {
+      sortUserId(offset, 2).then(users => {
         const userTable = document.querySelector('#userTable');
         const tbody = userTable.querySelector('tbody');
       
