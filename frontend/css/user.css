@@ -21,17 +21,16 @@ table,thead,tbody,tfoot,tr, td,th{
   text-align: center;
   margin: auto;
   padding: 1rem;
-  width: 50%;
   margin-top: 20px;
 }
-.table    { display: table; width: 50%; }
+.table    { display: table; width: 100%; }
 .tr       { display: table-row;  }
 .thead    { display: table-header-group }
 .tbody    { display: table-row-group }
 .tfoot    { display: table-footer-group }
 .col      { display: table-column }
 .colgroup { display: table-column-group }
-.td, .th   { display: table-cell; width: 50%; }
+.td, .th   { display: table-cell;}
 .caption  { display: table-caption }
 
 .table,
@@ -82,7 +81,7 @@ table,thead,tbody,tfoot,tr, td,th{
     border: none;
     font-style: oblique;
     cursor: pointer;
-    padding: 20px;
+    padding: 2px;
 }
 
 .sort-name {
@@ -92,7 +91,8 @@ table,thead,tbody,tfoot,tr, td,th{
     padding: 10px;
     margin-bottom: 10px;
     cursor: pointer;
-    font-family: Verdana, Geneva, Tahoma, sans-serif
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    float: right;
 }
 
 .sort-id {
@@ -102,14 +102,17 @@ table,thead,tbody,tfoot,tr, td,th{
     padding: 10px;
     margin-bottom: 10px;
     cursor: pointer;
+    float: right;
+    margin-bottom: 60px;
 }
 
 #userForm {
         box-sizing: border-box;
+        color : white
         }
       
       input[type=text], select, textarea {
-        width: 100%;
+        width: 50%;
         padding: 12px;
         border: 1px solid #ccc;
         border-radius: 4px;
@@ -124,7 +127,7 @@ table,thead,tbody,tfoot,tr, td,th{
       }
 
       input[type=email], select, textarea {
-        width: 100%;
+        width: 50%;
         padding: 12px;
         border: 1px solid #ccc;
         border-radius: 4px;
@@ -145,6 +148,7 @@ table,thead,tbody,tfoot,tr, td,th{
         border-radius: 4px;
         cursor: pointer;
         float: center;
+        font-weight: bolder;
       }
       
       input[type=submit]:hover {
