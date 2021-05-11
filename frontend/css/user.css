@@ -67,21 +67,22 @@ table,thead,tbody,tfoot,tr, td,th{
   }
 
 .one, .two, .three {
-    display: inline-block;
+    display: inline;
     color: black;
     padding: 8px 16px;
     text-decoration: none;
   }
 
-
 .search_bar {
-    border-style:bold;
+    float: left;
+    width: 10%;
+    padding: 10px;
+    background: #020202;
     color: white;
-    background-color: rgb(0, 0, 0);
-    border: none;
-    font-style: oblique;
+    font-size: 17px;
+    border: 1px solid grey;
+    border-left: none; /* Prevent double borders */
     cursor: pointer;
-    padding: 2px;
 }
 
 .sort-name {
@@ -105,6 +106,39 @@ table,thead,tbody,tfoot,tr, td,th{
     float: right;
     margin-bottom: 60px;
 }
+
+.search input[type=text] {
+    padding: 10px;
+    font-size: 17px;
+    border: 1px solid grey;
+    float: left;
+    width: 50%;
+    background: #f1f1f1;
+  }
+  
+  /* Style the submit button */
+  .search button {
+    float: left;
+    width: 50px;
+    padding: 10px;
+    background: #020202;
+    color: white;
+    font-size: 17px;
+    border: 1px solid grey;
+    border-left: none; /* Prevent double borders */
+    cursor: pointer;
+  }
+  
+  .search button:hover {
+    background: #5f6163;
+  }
+  
+  /* Clear floats */
+  .search::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
 
 #userForm {
         box-sizing: border-box;
